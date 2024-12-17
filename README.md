@@ -9,16 +9,22 @@
 > I see that we can have 2 alternatives here:
 >
 >a - We can use a parameter store / vault to save the credentials
+>
 >Example: Use the Azure Key Vault / AWS Systems Manager Parameter Store
+>
 >The good: is that it will be completely isolated from the code, so no problem to just call the variables into the .py file and upload it to the git that we are using, also increasing the security of the company.
+>
 >The ugly: Well, you need to do more configurations, so creating a new key vault, configure the variables, give the permissions and call the vault on your code.
 >
 >b- We can use env variables
 >Example: We can use the os.environ.get('DATABASE_KEY') for example or the decouple import config (its the same, but more organized)
+>
 >The good: Really easy, you just need to add the environment variables into the machines and devolpers can have a .env file in their PCS
+>
 >The ugly: This is not a good idea if you are using terraform, since you will expose the password the same way, and there will be the need of a copy with all the access for each developer.
 >
->Worth to mention:
+>**Worth to mention**:
+>
 >We also could use a Managed Identity, this way we just connect to the database creating roles into our database/machines, but i did not added it because i think that not every database that you are going to use will have this resource available.
 
 
@@ -29,11 +35,13 @@
 >I think we have 2 ways to manage it
 >
 >a - Adding some logs, saying that that piece of the code is working perfectly - this way we can trace what is going well when where it stopped
+>
 >b - Configuring some sys.exit(0) codes. So if you receive the 0 for example, it can means "success".
 
 • How would you change the script to simplify diagnosing any failures?
 
 >For me the best way would be creting try-catchs into the pieces that can run into problems, as the connection with the database, reaching the API and its response and doing the commit. 
+>
 >I would also add a sys.exit(1) for example, saying that the output of the code was an error.
 
 • Which methods or tools can be used to schedule such jobs? Provide at least two options, including their advantages and disadvantages.
@@ -41,21 +49,28 @@
 >a - I am a big fan of airflow, so this would be my first option.
 >
 >The good: It solves 2 of the problems that we mentioned here - Triggering the code and have a parameter store / Connection store that we can use - Also its really well mantained by the comunity and companies like Astronomer.
+>
 >The ugly: Its a new system to monitorize and it can be complex to create some dags, depending of what you want. Scaling is easy, but maybe if can not be the optimal cost.
 >
 >b - Also, as you are into the Azure environment, you could use the Azure Functions with CRON.
 >
 >The good: Serverless and auto scalable. Also really easy to connect with any other tool inside the Azure environment.
+>
 >The bad: bad for big applications, it creates a lock in situation into the cloud that you are using and you really depends on the azure plan that you have.
 
 
 3 - We will soon need to write another script to access the backend API and generate a PDF report. Should we copy the existing script and modify it, or are there better alternatives? What other approaches could we take?
 
 >Well, i would try to decouple the maximum that i can.
+>
 >If the backend api its a commom used connection, we could create a class for it, and you just use its methods into any other class/scrips that you need.
+>
 >Creating just one big file, just makes it harder to debug, conflicts on git and creates tons of responsability to the same code.
+>
 >If you take a look in the code, we could easly decouple the database and API connection.
+>
 >Also we need to have a configuration file, because imagine changing the same URL across different files, instead of just one.
+>
 >Another alternative is to get all the necessary data from the API, save into a datalake, and read the data from the datalake to create the report, but i would still do the first option first.
 
 4 - We aim to adopt a development approach based on continuous integration. 
