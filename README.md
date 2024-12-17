@@ -101,9 +101,9 @@ ronment?
 
 how to run:
 
-clone the repo 
-
-and add your fixer.io KEY into the **.env** file.
+***
+clone the repo and add your fixer.io KEY into the **.env** file.
+***
 
 <code>docker compose up</code>
 
