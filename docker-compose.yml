@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  exchange_rate_app:
+    build: .
+    container_name: exchange_rate_app
+    env_file: 
+      - .env
+    volumes:
+      - ./data:/app/data  # Map data
+      - ./scripts:/app/scripts #Map Scripts
+    stdin_open: true
+    tty: true
+    command: ["sleep", "infinity"]
+    #command: ["python", "/app/scripts/main.py"]
